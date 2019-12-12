@@ -1,0 +1,2 @@
+luajit ./Day1a.lua
+luajit ./Day1b.lua
