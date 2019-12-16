@@ -57,6 +57,28 @@ TESTA = {
   "176 ORE => 6 VJHF",
 }
 
+--[[
+TESTA = {
+  "171 ORE => 8 CNZTR",
+  "7 ZLQW, 3 BMBT, 9 XCVML, 26 XMNCP, 1 WPTQ, 2 MZWV, 1 RJRHP => 4 PLWSL",
+  "114 ORE => 4 BHXH",
+  "14 VRPVC => 6 BMBT",
+  "6 BHXH, 18 KTJDG, 12 WPTQ, 7 PLWSL, 31 FHTLT, 37 ZDVW => 1 FUEL",
+  "6 WPTQ, 2 BMBT, 8 ZLQW, 18 KTJDG, 1 XMNCP, 6 MZWV, 1 RJRHP => 6 FHTLT",
+  "15 XDBXC, 2 LTCX, 1 VRPVC => 6 ZLQW",
+  "13 WPTQ, 10 LTCX, 3 RJRHP, 14 XMNCP, 2 MZWV, 1 ZLQW => 1 ZDVW",
+  "5 BMBT => 4 WPTQ",
+  "189 ORE => 9 KTJDG",
+  "1 MZWV, 17 XDBXC, 3 XCVML => 2 XMNCP",
+  "12 VRPVC, 27 CNZTR => 2 XDBXC",
+  "15 KTJDG, 12 BHXH => 5 XCVML",
+  "3 BHXH, 2 VRPVC => 7 MZWV",
+  "121 ORE => 7 VRPVC",
+  "7 XCVML => 6 RJRHP",
+  "5 BHXH, 4 VRPVC => 5 LTCX",
+}
+]]
+
 function trim(s)
   if (type(s) ~= "string") then return "" end
   return s:gsub("^%s*(.-)%s*$", "%1") -- Trim Whitespace...
@@ -93,9 +115,9 @@ function loadReactions(input)
     end
   end
 
-  print("=================================")
-  dump(reactions)
-  print("=================================")
+  --print("=================================")
+  --dump(reactions)
+  --print("=================================")
   return reactions
 end
 
@@ -107,12 +129,12 @@ dbg = print
 
 
 function MakeComponent(component, number)
-  dbg("MakeComponent(" .. component .. "," .. number .. ")")
+  --dbg("MakeComponent(" .. component .. "," .. number .. ")")
   local ore = 0
   
   local reaction = reactions[component]
   local multiplier = math.ceil(number / reaction.produces)
-  print(component .. " multiplier: " .. multiplier .. " number: " .. number)
+  --print(component .. " multiplier: " .. multiplier .. " number: " .. number)
 
   for needed, count in pairs(reaction.requires) do
     --dbg("needed: " .. needed .. " count: " .. count)
@@ -128,22 +150,38 @@ function MakeComponent(component, number)
   if (component ~= "ORE") then
     reactions[component].inventory = reactions[component].inventory + (multiplier * reaction.produces)
   end
-  dbg(component .. " ore: " .. ore)
+  --dbg(component .. " ore: " .. ore)
   return ore
 end
 
---MakeComponent("FUEL", 1)
---dump(reactions)
---print(ORE_COUNT)
 
---reactions = loadReactions(TESTA)
-
--- Manual search for right amount...
+-- PartA
 reactions = loadReactions(INPUT)
-local ore_used = MakeComponent("FUEL", 3209254)
-if (ore_used > 1000000000000) then
-  print("TOO MUCH")
-else
-  print("TOO LITTLE")
+local ore_used = MakeComponent("FUEL", 1)
+print("Part A ore_used: " .. ore_used)
+
+
+-- PartB
+-- Binary Search for solution that is 'fit'...
+-- NOTE: Still possibly off-by-one, but I don't have time to fix ATM...
+
+local low = 1
+local high = 1000000000
+local cur_pos
+
+while (high - low > 2) do
+  cur_pos = math.ceil((high - low) / 2) + low
+  --print("LOW: " .. low .. " CUR: " .. cur_pos .. " HIGH: " .. high)
+
+  reactions = loadReactions(INPUT)
+  local ore_used = MakeComponent("FUEL", cur_pos)
+  if (ore_used > 1000000000000) then
+    --print("TOO HIGH")
+    high = cur_pos
+  else
+    --print("TOO LOW")
+    low = cur_pos
+  end
 end
+print("Part B max fuel produced: " .. cur_pos)
 
