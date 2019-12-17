@@ -1,0 +1,28 @@
+A - L,8,R,12,R,12,R,10
+B - R,10,R,12,R,10
+A - L,8,R,12,R,12,R,10
+B - R,10,R,12,R,10
+C - L,10,R,10,L,6
+C - L,10,R,10,L,6
+B - R,10,R,12,R,10
+A - L,8,R,12,R,12,R,10
+B - R,10,R,12,R,10
+C - L,10,R,10,L,6
+
+Main:
+A,B,A,B,C,C,B,A,B,C -- 
+
+for c in ("A,B,A,B,C,C,B,A,B,C"):gfind("(.)") do print(string.byte(c)) end
+for c in ("L,8,R,12,R,12,R,10"):gfind("(.)") do print(string.byte(c)) end
+for c in ("R,10,R,12,R,10"):gfind("(.)") do print(string.byte(c)) end
+for c in ("L,10,R,10,L,6"):gfind("(.)") do print(string.byte(c)) end
+
+65 44 66 44 65 44 66 44 67 44 67 44 66 44 65 44 66 44 67 10
+
+76 44 56 44 82 44 49 50 44 82 44 49 50 44 82 44 49 48 10
+
+82 44 49 48 44 82 44 49 50 44 82 44 49 48 10
+
+76 44 49 48 44 82 44 49 48 44 76 44 54 10
+
+110 10
